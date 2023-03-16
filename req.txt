@@ -1,0 +1,6 @@
+omegaconf
+sounddevice
+num2words
+requests
+pymorphy2
+vosk
