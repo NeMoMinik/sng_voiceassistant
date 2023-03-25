@@ -1,4 +1,3 @@
-import voice
 import time
 import words
 from num2words import num2words
@@ -104,11 +103,11 @@ def when_lesson():
 def hi():
     t = time.localtime().tm_hour
     if t < 13:
-        return "Доброе утро"
+        return "Доброе утро", True
     elif t < 17:
-        return "Добрый день"
+        return "Добрый день", True
     else:
-        return "Добрый вечер"
+        return "Добрый вечер", True
 
 
 print('LOG skills.py has been initialized')

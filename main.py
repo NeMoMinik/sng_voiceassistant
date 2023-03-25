@@ -5,9 +5,14 @@ import sounddevice as sd
 import vosk
 from sklearn.feature_extraction.text import CountVectorizer  # pip install scikit-learn
 from sklearn.linear_model import LogisticRegression
-
+import nltk
+from nltk.corpus import stopwords
 from skills import *
+import voice
 
+nltk.download('punkt')
+nltk.download('stopwords')
+stop_words = stopwords.words("russian")
 q = queue.Queue()
 vosk_model = vosk.Model('model_small')
 device = sd.default.device
@@ -17,7 +22,6 @@ show = False
 
 def recognize(data, vectorizer, clf):
     if data:
-        print(data)
         trg = words.TRIGGERS.intersection(data.split())
         forbidden = words.forbidden.intersection(data.split())
         if not trg:
@@ -25,7 +29,9 @@ def recognize(data, vectorizer, clf):
         elif forbidden:
             pass
         else:
-            data.replace(list(trg)[0], '')
+            data = filter(lambda x: x not in stop_words and x not in trg, data.split())
+            data = ' '.join(map(lambda x: morph.parse(x)[0].normal_form, data))
+            print(data)
             text_vector = vectorizer.transform([data]).toarray()[0]
             answer = clf.predict([text_vector])[0]
             voice.speak(eval(answer))

@@ -3,6 +3,7 @@ from time import sleep
 import torch
 import sounddevice as sd
 import os
+import pickle
 language = 'ru'
 model_id = 'ru_v3'
 device = torch.device('cpu')
@@ -18,13 +19,15 @@ speaker = 'aidar'
 put_accent = True
 put_yo = True
 model.to(device)
-cache = dict()
+with open('cache.pl', 'rb') as f:
+    cache = pickle.load(f)
 
 
-def speak(text):
+def speak(text, save=True):
     text = "<speak><prosody rate='fast'>" + text + "</prosody></speak>"
     if text in cache.keys():
         audio = cache[text]
+        sd.play(audio)
     else:
         audio = model.apply_tts(ssml_text=text,
                                 # voice_path='C:/Users/User/Desktop/sng_voiceassistant/voices/funny.pt',
@@ -33,7 +36,12 @@ def speak(text):
                                 put_accent=put_accent,
                                 put_yo=put_yo)
         cache.update({text: audio})
-    sd.play(audio)
+        if save:
+            sd.play(audio)
+            with open('cache.pl', 'wb') as f:
+                pickle.dump(cache, f)
+        else:
+            sd.play(audio)
     sleep(len(audio) / 36000)
 
 
