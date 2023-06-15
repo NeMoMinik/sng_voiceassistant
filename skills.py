@@ -5,10 +5,11 @@ import requests as rq
 import pymorphy2 as pm2
 
 morph = pm2.MorphAnalyzer()
-
+# try neural network
+#
 
 class Schedule:
-    sched_time = [range(480, 521), range(521, 531), range(531, 571), range(571, 586), range(586, 626), range(626, 641), range(641, 681), range(681, 696), range(696, 736)]
+    sched_time = [(8 * 60, 8 * 60 + 40), (8 * 60 + 50, 9 * 60 + 30), range(531, 571), range(571, 586), range(586, 626), range(626, 641), range(641, 681), range(681, 696), range(696, 736)]
     sched_items = [...]
 
     @classmethod
@@ -81,7 +82,12 @@ def day():
 
 
 def lesson(data):
-    return 'Пока что это функция недоступна'
+    cl = 0
+    letter = ''
+    for i in data:
+        if cl := words.classes.get(i) is not None:
+            break
+    return 'абоба'
 
 
 def when_lesson():
@@ -103,11 +109,11 @@ def when_lesson():
 def hi():
     t = time.localtime().tm_hour
     if t < 13:
-        return "Доброе утро", True
+        return "Доброе утро"
     elif t < 17:
-        return "Добрый день", True
+        return "Добрый день"
     else:
-        return "Добрый вечер", True
+        return "Добрый вечер"
 
 
 print('LOG skills.py has been initialized')

@@ -19,8 +19,11 @@ speaker = 'aidar'
 put_accent = True
 put_yo = True
 model.to(device)
-with open('cache.pl', 'rb') as f:
-    cache = pickle.load(f)
+if 'cache.pl' in os.listdir():
+    with open('cache.pl', 'rb') as f:
+        cache = pickle.load(f)
+else:
+    cache = {}
 
 
 def speak(text, save=True):
